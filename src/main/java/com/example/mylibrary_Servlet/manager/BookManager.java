@@ -4,6 +4,7 @@ import com.example.mylibrary_Servlet.db.DBConnectionProvider;
 import com.example.mylibrary_Servlet.model.Author;
 import com.example.mylibrary_Servlet.model.Book;
 import com.example.mylibrary_Servlet.model.User;
+import com.example.mylibrary_Servlet.model.UserType;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -94,8 +95,11 @@ public class BookManager {
             e.printStackTrace();
         }
     }
-    public void removeById(int id){
+    public void removeById(int id, User user){
         String sql = "DELETE FROM book WHERE id = " + id;
+        if(user.getUserType() == UserType.USER){
+            sql += " and user_id = " + user.getId();
+        }
         try(Statement statement = connection.createStatement()) {
             statement.executeUpdate(sql);
         } catch (SQLException e) {
